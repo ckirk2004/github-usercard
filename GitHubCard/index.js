@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -28,7 +30,25 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "LuckyMcBeast",
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell",
+];
+
+const appendUsers = document.querySelector(".container");
+
+followersArray.forEach((user) => {
+  axios
+    .get(`https://api.github.com/users/${user}`)
+    .then((res) => {
+      appendUsers.appendChild(gitCard(res.data));
+    })
+    .catch((err) => console.log(err));
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +69,64 @@ const followersArray = [];
       </div>
     </div>
 */
+
+axios
+  .get("https://api.github.com/users/ckirk2004")
+  .then((res) => {
+    console.log(res);
+    return gitCard(res.data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+function gitCard(obj) {
+  //element creation
+  const mainDiv = document.createElement("div");
+  const userImg = document.createElement("img");
+  const secondDiv = document.createElement("div");
+  const mainName = document.createElement("h3");
+  const userName = document.createElement("p");
+  const userLocation = document.createElement("p");
+  const userProfile = document.createElement("p");
+  const profileLink = document.createElement("a");
+  const userFollowers = document.createElement("p");
+  const userFollowing = document.createElement("p");
+  const userBio = document.createElement("p");
+  //add classes
+  mainDiv.classList.add("card");
+  secondDiv.classList.add("card-info");
+  mainName.classList.add("name");
+  userName.classList.add("username");
+  //add content
+  userImg.setAttribute("src", obj.avatar_url);
+  mainName.textContent = obj.name;
+  userName.textContent = obj.login;
+  userLocation.textContent = `Location: ${obj.location}`;
+  userProfile.textContent = "Profile:";
+  profileLink.setAttribute("href", obj.html_url);
+  userFollowers.textContent = `Followers: ${obj.followers}`;
+  userFollowing.textContent = `Following: ${obj.following}`;
+  userBio.textContent = `Bio: ${obj.bio}`;
+
+  const parentNode = document.querySelector(".cards");
+  //appends
+  parentNode.appendChild(mainDiv);
+
+  mainDiv.appendChild(userImg);
+  mainDiv.appendChild(secondDiv);
+  secondDiv.appendChild(mainName);
+  secondDiv.appendChild(userName);
+  secondDiv.appendChild(userLocation);
+  secondDiv.appendChild(userProfile);
+  secondDiv.appendChild(profileLink);
+  secondDiv.appendChild(userFollowers);
+  secondDiv.appendChild(userFollowing);
+  secondDiv.appendChild(userBio);
+
+  //return
+  return mainDiv;
+}
 
 /*
   List of LS Instructors Github username's:
